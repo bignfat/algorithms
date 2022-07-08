@@ -1,5 +1,25 @@
 namespace test;
-public class TestMergesort
+
+public abstract class SortFacts<T, K> where T : ISortAlgorithm<K>
+{
+    [Theory, AutoRepositoryData]
+    public void CheckSortAlgorithm(ISortAlgorithm<K> sortAlgorithm, K[] input)
+    {
+        var expected = new K[input.Length];
+        
+        Array.Copy(input, expected, input.Length);
+        Array.Sort(expected);
+        
+        sortAlgorithm.Sort(input);
+
+        Assert.Equal<K>(expected, input);
+    }
+}
+
+public class MergesortNumbersFacts : SortFacts<Mergesort, int> { }
+public class MergesortBottomUpNumbersFacts : SortFacts<MergesortBottomUp, int> { }
+
+public class SortFacts
 {
     [Fact]
     public void CheckNumbersSort()
@@ -14,7 +34,7 @@ public class TestMergesort
         }
 
         Array.Sort(sorted);
-        Mergesort.Sort(notsorted);
+        new Mergesort().Sort(notsorted);
 
         Assert.Equal(sorted, notsorted);
     }
@@ -32,7 +52,7 @@ public class TestMergesort
         }
 
         Array.Sort(sorted);
-        Mergesort.Sort(notsorted);
+        new Mergesort().Sort(notsorted);
 
         Assert.Equal(sorted, notsorted);
     }
@@ -50,7 +70,7 @@ public class TestMergesort
         }
 
         Array.Sort(sorted);
-        Mergesort.Sort(notsorted);
+        new Mergesort().Sort(notsorted);
 
         Assert.Equal(sorted, notsorted);
     }

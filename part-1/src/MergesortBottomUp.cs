@@ -1,15 +1,20 @@
 ﻿namespace src;
 
-public class Mergesort : ISortAlgorithm<int>
+public class MergesortBottomUp : ISortAlgorithm<int>
 {
-    // 1. Split on two arrays
-    // 2. Sort two parts separately
-    // 3. Merge two sorted part into one array
     public void Sort(int[] array)
     {
         var aux = new int[array.Length];
 
-        Sort(array, aux, 0, array.Length - 1);
+        for (var length = 1; length < array.Length; length = length * 2)
+        {
+            for (var start = 0; start < array.Length; start += length)
+            {
+                var end = start + 2 * length - 1;
+                var middle = start + length;
+                Merge(array, aux, start, middle, end);
+            }
+        }
     }
 
     private void Merge(int[] array, int[] aux, int start, int middle, int end)
@@ -39,17 +44,5 @@ public class Mergesort : ISortAlgorithm<int>
             else
                 array[k] = aux[j++];
         }
-    }
-
-    private void Sort(int[] array, int[] aux, int start, int end)
-    {
-        if (start >= end)
-            return;
-
-        var middle = Math.Abs((end - start) / 2) + start;
-
-        Sort(array, aux, start, middle);
-        Sort(array, aux, middle + 1, end);
-        Merge(array, aux, start, middle, end);
     }
 }
